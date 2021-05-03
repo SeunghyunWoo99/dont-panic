@@ -21,7 +21,8 @@ target 'dontPanic' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
+  # 프로젝트 생성 직후 빌드 에러가 나서, flipper 사용 안함
+  # use_flipper!()
 
   post_install do |installer|
     react_native_post_install(installer)
