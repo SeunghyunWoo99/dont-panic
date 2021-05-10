@@ -1,12 +1,33 @@
-import React from 'react'
-import { SafeAreaView, StatusBar } from 'react-native'
+import * as React from 'react'
+import { Text, View } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-const App = () => {
+function MapScreen() {
   return (
-    <SafeAreaView>
-      <StatusBar barStyle={'dark-content'} />
-    </SafeAreaView>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Map</Text>
+    </View>
   )
 }
 
-export default App
+function PostScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Posts</Text>
+    </View>
+  )
+}
+
+const Tab = createBottomTabNavigator()
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Map" component={MapScreen} />
+        <Tab.Screen name="Post" component={PostScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  )
+}
