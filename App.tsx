@@ -1,15 +1,35 @@
-import * as React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import React, { useRef } from 'react'
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { MainTabNavigator } from 'navigations'
+import { TestScreen } from 'scenes'
+import { Pressable, Text } from 'react-native'
 
 const Stack = createStackNavigator()
 
 export default function App() {
+  const navigationRef = useRef<NavigationContainerRef>(null)
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
-        <Stack.Screen name="MainTabNavigator" component={MainTabNavigator} />
+        <Stack.Screen
+          name="MainTabNavigator"
+          component={MainTabNavigator}
+          options={{
+            headerTransparent: true,
+            headerTitle: () => null,
+            headerRight: () => (
+              <Pressable
+                onPress={() => navigationRef.current?.navigate('TestScreen')}
+                style={{ padding: 10, marginRight: 10 }}
+                hitSlop={10}>
+                <Text>Test</Text>
+              </Pressable>
+            ),
+          }}
+        />
+        <Stack.Screen name="TestScreen" component={TestScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
