@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
 import { MainTabNavigator } from 'navigations'
 import { TestScreen } from 'scenes'
 import { Pressable, Text } from 'react-native'
@@ -29,7 +29,14 @@ export default function App() {
             ),
           }}
         />
-        <Stack.Screen name="TestScreen" component={TestScreen} />
+        <Stack.Screen
+          name="TestScreen"
+          component={TestScreen}
+          options={{
+            headerTransparent: true,
+            ...TransitionPresets.ModalTransition,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
