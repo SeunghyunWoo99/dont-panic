@@ -13,6 +13,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2BF7801F518E8AE7A5A6CB6F /* libPods-dontPanic-dontPanicTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB8D2151D2764AD0A19CAB8 /* libPods-dontPanic-dontPanicTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		81FBFA1C264AF3900095CAC0 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FBFA1B264AF3900095CAC0 /* File.swift */; };
+		81FBFA23264AF58E0095CAC0 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FBFA22264AF58E0095CAC0 /* PassKit.framework */; };
 		C04AE8DD6FA8E4CCF49E1379 /* libPods-dontPanic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88A444A2862E48EB7C90495F /* libPods-dontPanic.a */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +41,10 @@
 		156FA53567B7B9CA9687D63D /* Pods-dontPanic-dontPanicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dontPanic-dontPanicTests.release.xcconfig"; path = "Target Support Files/Pods-dontPanic-dontPanicTests/Pods-dontPanic-dontPanicTests.release.xcconfig"; sourceTree = "<group>"; };
 		38B05B247E54AAC8F23B7E45 /* Pods-dontPanic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dontPanic.debug.xcconfig"; path = "Target Support Files/Pods-dontPanic/Pods-dontPanic.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = dontPanic/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		81FBFA1A264AF38F0095CAC0 /* dontPanic-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "dontPanic-Bridging-Header.h"; sourceTree = "<group>"; };
+		81FBFA1B264AF3900095CAC0 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		81FBFA1F264AF4DF0095CAC0 /* dontPanic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = dontPanic.entitlements; path = dontPanic/dontPanic.entitlements; sourceTree = "<group>"; };
+		81FBFA22264AF58E0095CAC0 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
 		873E432304C8957E92B771C0 /* Pods-dontPanic-dontPanicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dontPanic-dontPanicTests.debug.xcconfig"; path = "Target Support Files/Pods-dontPanic-dontPanicTests/Pods-dontPanic-dontPanicTests.debug.xcconfig"; sourceTree = "<group>"; };
 		88A444A2862E48EB7C90495F /* libPods-dontPanic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dontPanic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EE39760A5AEEE530365BCE8 /* Pods-dontPanic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dontPanic.release.xcconfig"; path = "Target Support Files/Pods-dontPanic/Pods-dontPanic.release.xcconfig"; sourceTree = "<group>"; };
@@ -59,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FBFA23264AF58E0095CAC0 /* PassKit.framework in Frameworks */,
 				C04AE8DD6FA8E4CCF49E1379 /* libPods-dontPanic.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +93,7 @@
 		13B07FAE1A68108700A75B9A /* dontPanic */ = {
 			isa = PBXGroup;
 			children = (
+				81FBFA1F264AF4DF0095CAC0 /* dontPanic.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -99,6 +107,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81FBFA22264AF58E0095CAC0 /* PassKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				88A444A2862E48EB7C90495F /* libPods-dontPanic.a */,
 				8FB8D2151D2764AD0A19CAB8 /* libPods-dontPanic-dontPanicTests.a */,
@@ -114,7 +123,6 @@
 				873E432304C8957E92B771C0 /* Pods-dontPanic-dontPanicTests.debug.xcconfig */,
 				156FA53567B7B9CA9687D63D /* Pods-dontPanic-dontPanicTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -128,12 +136,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				81FBFA1B264AF3900095CAC0 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* dontPanic */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* dontPanicTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				572F265B4128693587375D51 /* Pods */,
+				81FBFA1A264AF38F0095CAC0 /* dontPanic-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -206,7 +216,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -376,6 +386,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				81FBFA1C264AF3900095CAC0 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -395,6 +406,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 873E432304C8957E92B771C0 /* Pods-dontPanic-dontPanicTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -422,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 156FA53567B7B9CA9687D63D /* Pods-dontPanic-dontPanicTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = dontPanicTests/Info.plist;
@@ -448,6 +461,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = dontPanic/dontPanic.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = dontPanic/Info.plist;
@@ -462,6 +476,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = dontPanic;
+				SWIFT_OBJC_BRIDGING_HEADER = "dontPanic-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -474,6 +489,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = dontPanic/dontPanic.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = dontPanic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -487,6 +503,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = dontPanic;
+				SWIFT_OBJC_BRIDGING_HEADER = "dontPanic-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
