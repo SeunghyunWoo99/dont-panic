@@ -1,14 +1,21 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { Platform, Pressable, Text } from 'react-native'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
+import Geolocation from 'react-native-geolocation-service'
 import { MainTabNavigator } from 'navigations'
 import { TestScreen } from 'scenes'
-import { Pressable, Text } from 'react-native'
 
 const Stack = createStackNavigator()
 
 export default function App() {
   const navigationRef = useRef<NavigationContainerRef>(null)
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization('always')
+    }
+  }, [])
 
   return (
     <NavigationContainer ref={navigationRef}>
