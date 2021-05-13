@@ -37,7 +37,14 @@ export default function MapScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <MapView style={{ flex: 1 }} provider={PROVIDER_GOOGLE} region={region} />
+      <MapView
+        style={{ flex: 1 }}
+        provider={PROVIDER_GOOGLE}
+        region={region}
+        showsUserLocation
+        followsUserLocation
+        showsMyLocationButton
+      />
     </View>
   )
 }
