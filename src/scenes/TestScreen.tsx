@@ -32,6 +32,7 @@ function TestCard(props: {
   cardIndex: number
   answers: (string | undefined)[]
   setAnswers: React.Dispatch<React.SetStateAction<(string | undefined)[]>>
+  scrollViewRef: React.RefObject<ScrollView>
 }) {
   return (
     <View
@@ -51,6 +52,7 @@ function TestCard(props: {
               props.setAnswers((prev) => {
                 const array = [...prev]
                 array[props.cardIndex] = index.toString()
+                props.scrollViewRef.current?.scrollTo({ x: (props.cardIndex + 1) * CARD_WIDTH })
                 return array
               })
             }}
@@ -87,7 +89,14 @@ export default function TestScreen() {
         snapToInterval={CARD_WIDTH}
         snapToAlignment="center">
         {DATA.map((item, index) => (
-          <TestCard key={index.toString()} cardIndex={index} data={item} answers={answers} setAnswers={setAnswers} />
+          <TestCard
+            key={index.toString()}
+            cardIndex={index}
+            data={item}
+            answers={answers}
+            setAnswers={setAnswers}
+            scrollViewRef={scrollViewRef}
+          />
         ))}
       </ScrollView>
     </View>
