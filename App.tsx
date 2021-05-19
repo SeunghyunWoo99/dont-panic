@@ -40,7 +40,7 @@ export default function App() {
           name="TestScreen"
           component={TestScreen}
           options={{
-            headerTransparent: true,
+            headerShown: false,
             ...TransitionPresets.ModalTransition,
           }}
         />
