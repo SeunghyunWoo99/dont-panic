@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import { scale, verticalScale } from 'react-native-size-matters'
 import { size } from 'utils'
@@ -77,6 +77,31 @@ export default function TestScreen() {
   const scrollViewRef = useRef<ScrollView>(null)
   /** 질문에 대한 답 배열 */
   const [answers, setAnswers] = useState(new Array<string | undefined>(10))
+  /** 테스트 점수(높을 수록 코로나 감염자일 확률이 높음) */
+  const [score, setScore] = useState(0)
+
+  useEffect(() => {
+    // 모든 질문에 답변을 했으면
+    if (!answers.includes(undefined)) {
+      fetch(
+        // 서버 형식에 맞게 답변 결과 값 넣어서 url 구성
+        answers.reduce(
+          (acc, answer, index) => acc + `as${index + 1}=${Number(answer) + 1}&`,
+          'http://52.78.126.183:3000/ows/survey?',
+        ) as string,
+        {
+          method: 'GET',
+        },
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          setScore(result.score)
+        })
+        .catch((error) => {
+          console.error('코로나 자가 진단 결과를 불러오지 못 함', error)
+        })
+    }
+  }, [answers])
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -98,6 +123,19 @@ export default function TestScreen() {
             scrollViewRef={scrollViewRef}
           />
         ))}
+        {/* FIXME: 테스트 결과 보여주는 임시 카드 */}
+        <View
+          style={{
+            width: CARD_WIDTH,
+            height: CARD_HEIGHT,
+            paddingVertical: scale(100),
+            paddingHorizontal: scale(24),
+            backgroundColor: 'white',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{ fontSize: scale(88), fontWeight: 'bold', marginBottom: scale(32) }}>{score}</Text>
+        </View>
       </ScrollView>
     </View>
   )
