@@ -3,8 +3,7 @@ import { Platform, Pressable, Text } from 'react-native'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
 import Geolocation from 'react-native-geolocation-service'
-import { MainTabNavigator } from 'navigations'
-import { TestScreen } from 'scenes'
+import { MainTabNavigator, TestStackNavigator } from 'navigations'
 
 const Stack = createStackNavigator()
 
@@ -28,7 +27,7 @@ export default function App() {
             headerTitle: () => null,
             headerRight: () => (
               <Pressable
-                onPress={() => navigationRef.current?.navigate('TestScreen')}
+                onPress={() => navigationRef.current?.navigate('TestStackNavigator')}
                 style={{ padding: 10, marginRight: 10 }}
                 hitSlop={10}>
                 <Text>Test</Text>
@@ -37,10 +36,10 @@ export default function App() {
           }}
         />
         <Stack.Screen
-          name="TestScreen"
-          component={TestScreen}
+          name="TestStackNavigator"
+          component={TestStackNavigator}
           options={{
-            headerTransparent: true,
+            headerShown: false,
             ...TransitionPresets.ModalTransition,
           }}
         />
