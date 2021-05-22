@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { scale, verticalScale } from 'react-native-size-matters'
 import { size } from 'utils'
 
@@ -64,7 +65,7 @@ function TestCard(props: ITestCardProps) {
           <TouchableOpacity
             key={index.toString()}
             onPress={() => {
-              props.setAnswers((prev) => {
+              props.setAnswers(prev => {
                 const array = [...prev]
                 // 답변 선택 시 array 업데이트
                 array[props.cardIndex] = index.toString()
@@ -93,12 +94,12 @@ function TestCard(props: ITestCardProps) {
 
 /** 코로나 자가진단 테스트 화면 */
 export default function TestScreen() {
+  const navigation = useNavigation()
+
   /** 답변 완료 시 다음 질문으로 넘어가기 위한 ScrollView ref */
   const scrollViewRef = useRef<ScrollView>(null)
   /** 질문에 대한 답 배열 */
   const [answers, setAnswers] = useState(new Array<string | undefined>(10))
-  /** 테스트 점수(높을 수록 코로나 감염자일 확률이 높음) */
-  const [score, setScore] = useState(0)
 
   useEffect(() => {
     // 모든 질문에 답변을 했으면
@@ -114,15 +115,15 @@ export default function TestScreen() {
           method: 'GET',
         },
       )
-        .then((response) => response.json())
-        .then((result) => {
-          setScore(result.score)
+        .then(response => response.json())
+        .then(result => {
+          navigation.navigate('ResultScreen', { score: result.score })
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('코로나 자가 진단 결과를 불러오지 못 함', error)
         })
     }
-  }, [answers])
+  }, [answers, navigation])
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -147,19 +148,6 @@ export default function TestScreen() {
             scrollViewRef={scrollViewRef}
           />
         ))}
-        {/* FIXME: 테스트 결과 보여주는 임시 카드 */}
-        <View
-          style={{
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT,
-            paddingVertical: scale(100),
-            paddingHorizontal: scale(24),
-            backgroundColor: 'white',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Text style={{ fontSize: scale(88), fontWeight: 'bold', marginBottom: scale(32) }}>{score}</Text>
-        </View>
       </ScrollView>
     </View>
   )
