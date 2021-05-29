@@ -1,7 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { TouchableOpacity, View, Text } from 'react-native'
+import styled from 'styled-components'
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
+import { scale } from 'react-native-size-matters'
+
+const Tag = styled(TouchableOpacity)`
+  background-color: white;
+  height: ${scale(24)};
+  padding-horizontal: ${scale(6)};
+  border-radius: ${scale(12)};
+  align-items: center;
+  justify-content: center;
+  margin-right: ${scale(8)};
+`
 
 export default function MapScreen() {
   const [region, setRegion] = useState<Region>({
@@ -55,6 +67,14 @@ export default function MapScreen() {
         followsUserLocation
         showsMyLocationButton
       />
+      <View style={{ position: 'absolute', marginHorizontal: scale(16), marginTop: scale(24), flexDirection: 'row' }}>
+        <Tag>
+          <Text>#코로나 안심 병원</Text>
+        </Tag>
+        <Tag>
+          <Text>#일반 진료</Text>
+        </Tag>
+      </View>
     </View>
   )
 }
