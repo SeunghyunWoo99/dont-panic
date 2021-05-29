@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { TouchableOpacity, View, Text } from 'react-native'
 import styled from 'styled-components'
-import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
 import { scale } from 'react-native-size-matters'
 
@@ -22,6 +22,8 @@ export default function MapScreen() {
     latitudeDelta: 0.05,
     longitudeDelta: 0.02,
   })
+  /** 지도에 표기할 병원들 */
+  const [hospitals, setHospitals] = useState([])
 
   const setLocationFromCurrent = useCallback(
     () =>
@@ -65,8 +67,18 @@ export default function MapScreen() {
         region={region}
         showsUserLocation
         followsUserLocation
-        showsMyLocationButton
-      />
+        showsMyLocationButton>
+        {hospitals.map((hospital, index) => (
+          <Marker
+            // 일반 병원 ?? 코로나 병원 순서
+            key={index}
+            coordinate={{
+              latitude: hospital.YPos?._text ?? hospital.lat,
+              longitude: hospital.XPos?._text ?? hospital.lng,
+            }}
+          />
+        ))}
+      </MapView>
       <View style={{ position: 'absolute', marginHorizontal: scale(16), marginTop: scale(24), flexDirection: 'row' }}>
         <Tag
           onPress={() => {
