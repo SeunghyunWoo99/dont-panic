@@ -31,9 +31,19 @@ export default function MapScreen() {
     [],
   )
 
+  // useEffect(() => {
+  //   setLocationFromCurrent()
+  // }, [setLocationFromCurrent])
+
+  // FIXME: 시연 전 개발을 위해 일단 세종대학교 대양 AI 센터를 위치로 잡음
   useEffect(() => {
-    setLocationFromCurrent()
-  }, [setLocationFromCurrent])
+    setRegion({
+      latitude: 37.551080473869774,
+      longitude: 127.07572521105389,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.02,
+    })
+  }, [])
 
   return (
     <View style={{ flex: 1 }}>
