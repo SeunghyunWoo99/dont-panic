@@ -68,10 +68,39 @@ export default function MapScreen() {
         showsMyLocationButton
       />
       <View style={{ position: 'absolute', marginHorizontal: scale(16), marginTop: scale(24), flexDirection: 'row' }}>
-        <Tag>
+        <Tag
+          onPress={() => {
+            fetch('http://52.78.126.183:3000/ows/covid-hospital', {
+              method: 'GET',
+            })
+              .then((response) => response.json())
+              .then((result) => {
+                console.log(result)
+                setHospitals(result)
+              })
+              .catch((error) => {
+                console.error('코로나 안심 병원을 불러오지 못함', error)
+              })
+          }}>
           <Text>#코로나 안심 병원</Text>
         </Tag>
-        <Tag>
+        <Tag
+          onPress={() => {
+            fetch(
+              `http://52.78.126.183:3000/ows/hospital?lng=${region.longitude}&lat=${region.latitude}&radius=500&dgsbjtCd=01`,
+              {
+                method: 'GET',
+              },
+            )
+              .then((response) => response.json())
+              .then((result) => {
+                console.log(result)
+                setHospitals(result.result)
+              })
+              .catch((error) => {
+                console.error('일반 진료 병원을 불러오지 못함', error)
+              })
+          }}>
           <Text>#일반 진료</Text>
         </Tag>
       </View>
