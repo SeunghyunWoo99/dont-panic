@@ -33,7 +33,7 @@ export default function MapScreen() {
           setRegion({
             latitude,
             longitude,
-            latitudeDelta: 0.05,
+            latitudeDelta: 0.035,
             longitudeDelta: 0.02,
           })
         },
@@ -54,7 +54,7 @@ export default function MapScreen() {
     setRegion({
       latitude: 37.551080473869774,
       longitude: 127.07572521105389,
-      latitudeDelta: 0.05,
+      latitudeDelta: 0.035,
       longitudeDelta: 0.02,
     })
   }, [])
