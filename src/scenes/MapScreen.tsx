@@ -22,8 +22,9 @@ export default function MapScreen() {
     latitudeDelta: 0.05,
     longitudeDelta: 0.02,
   })
+  // FIXME: 타입 any 수정
   /** 지도에 표기할 병원들 */
-  const [hospitals, setHospitals] = useState([])
+  const [hospitals, setHospitals] = useState<any>([])
 
   const setLocationFromCurrent = useCallback(
     () =>
@@ -68,7 +69,7 @@ export default function MapScreen() {
         showsUserLocation
         followsUserLocation
         showsMyLocationButton>
-        {hospitals.map((hospital, index) => (
+        {hospitals.map((hospital: any, index: number) => (
           <Marker
             // 일반 병원 ?? 코로나 병원 순서
             key={index}
