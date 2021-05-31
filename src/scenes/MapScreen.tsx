@@ -76,6 +76,11 @@ export default function MapScreen() {
               latitude: hospital.YPos?._text ?? hospital.lat,
               longitude: hospital.XPos?._text ?? hospital.lng,
             }}
+            title={hospital.yadmNm?._text ?? hospital.yadmnm}
+            description={`\n주소: ${hospital.addr?._text ?? hospital.addr}\n전화번호: ${
+              hospital.telno?._text ?? hospital.telno
+            }
+            `}
           />
         ))}
       </MapView>
