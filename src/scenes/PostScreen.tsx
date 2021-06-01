@@ -1,6 +1,8 @@
 import * as React from 'react'
-import { Text, View, FlatList, TouchableOpacity } from 'react-native'
+import { Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
+import { size } from 'utils'
 
 interface IData {
   key: string
@@ -32,6 +34,47 @@ const DATA = [
   { key: '19' },
   { key: '20' },
 ]
+
+/** 보드 카드의 너비: 전체 화면 너비 */
+const CARD_WIDTH = size.screenWidth * 0.84
+/** 보드 카드의 수평 마진 */
+const CARD_MARGIN_HORIZONTAL = size.screenWidth * 0.08
+/** 보드 카드의 높이: 전체 화면 높이 */
+const CARD_HEIGHT = scale(200)
+
+/** 코로나 관련 현황을 보여주는 개별 카드 */
+const CoronaBoardCard = styled(View)`
+  width: ${CARD_WIDTH};
+  height: ${CARD_HEIGHT};
+  margin-horizontal: ${CARD_MARGIN_HORIZONTAL};
+  margin-vertical: ${scale(24)};
+  border-radius: ${scale(6)};
+  shadow-offset: 8px 8px;
+  shadow-opacity: 0.1;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+`
+
+/** 코로나 카드들이 수평으로 위치한 보드 */
+function CoronaBoard() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {/* 수평으로 scroll 되는 ScrollView */}
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        decelerationRate={0.9}
+        // ScrollView를 페이징 되게 하는 props들, 카드를 넘기 듯이 snap 됨
+        snapToInterval={CARD_WIDTH * 2 * CARD_MARGIN_HORIZONTAL}
+        snapToAlignment="center">
+        <CoronaBoardCard />
+        <CoronaBoardCard />
+      </ScrollView>
+    </View>
+  )
+}
 
 function Post() {
   return (
@@ -72,7 +115,13 @@ function Post() {
 export default function PostScreen() {
   return (
     <View style={{ flex: 1 }}>
-      <FlatList keyExtractor={(item) => item.toString()} data={DATA} renderItem={() => <Post />} />
+      <View style={{ height: scale(36) }} />
+      <FlatList
+        keyExtractor={(item) => item.toString()}
+        data={DATA}
+        renderItem={() => <Post />}
+        ListHeaderComponent={<CoronaBoard />}
+      />
     </View>
   )
 }
