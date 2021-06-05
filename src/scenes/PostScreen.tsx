@@ -1,8 +1,9 @@
-import * as React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
-import { size } from 'utils'
+import { parse } from 'fast-xml-parser'
+import { API_KEY, size } from 'utils'
 
 interface IData {
   key: string
@@ -81,8 +82,66 @@ const CoronaBoardCardAtom = (props: { title: string; count: number; difference: 
   )
 }
 
+/** 코로나 국내 발생 현황 데이터 타입 */
+interface IDomecticStatus {
+  decideCnt: number
+  clearCnt: number
+  deathCnt: number
+  examCnt: number
+}
+
+/** 코로나 시도별 발생 현황 데이터 타입 */
+interface IRegionalStatus {
+  defCnt: number
+  deathCnt: number
+  isolClearCnt: number
+  isolIngCnt: number
+  incDec: number
+  localOccCnt: number
+  overFlowCnt: number
+  gubun: string
+}
+
 /** 코로나 카드들이 수평으로 위치한 보드 */
 function CoronaBoard() {
+  /** 국내 전체 발생 현황 */
+  const [domesticStatus, setDomesticStatus] = useState<IDomecticStatus[]>()
+  /** 지역 발생 현황 */
+  const [regionalStatus, setRegionalStatus] = useState<IRegionalStatus[]>()
+
+  useEffect(() => {
+    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
+    queryParams += '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent('20210604')
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent('20210605')
+
+    fetch(url + queryParams)
+      .then((response) => response.text())
+      .then((responseText) => {
+        setDomesticStatus(parse(responseText).response.body.items.item)
+      })
+      .catch((error) => {
+        console.log('코로나 현황 불러오기 실패: ', error)
+      })
+
+    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
+    queryParams += '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent('20210604')
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent('20210605')
+
+    fetch(url + queryParams)
+      .then((response) => response.text())
+      .then((responseText) => {
+        setRegionalStatus(
+          // FIXME: 실제 지역 연결 전 임시로 서울로 설정
+          parse(responseText).response.body.items.item.filter((status: IRegionalStatus) => status.gubun === '서울'),
+        )
+      })
+      .catch((error) => {
+        console.log('코로나 시도별 현황 불러오기 실패: ', error)
+      })
+  }, [])
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       {/* 수평으로 scroll 되는 ScrollView */}
@@ -96,36 +155,104 @@ function CoronaBoard() {
         snapToAlignment="center">
         {/* 0 */}
         <CoronaBoardCard key={'0'}>
-          <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} colorIndex={0} />
-            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} colorIndex={1} />
-          </CoronaBoardCardMolecule>
-          <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} colorIndex={2} />
-            <CoronaBoardCardAtom title={'검사진행'} count={141476} difference={478} colorIndex={3} />
-          </CoronaBoardCardMolecule>
+          {domesticStatus && (
+            <>
+              <CoronaBoardCardMolecule>
+                <CoronaBoardCardAtom
+                  title={'확진자'}
+                  count={domesticStatus[0].decideCnt}
+                  difference={domesticStatus[0].decideCnt - domesticStatus[1].decideCnt}
+                  colorIndex={0}
+                />
+                <CoronaBoardCardAtom
+                  title={'격리해제'}
+                  count={domesticStatus[0].clearCnt}
+                  difference={domesticStatus[0].clearCnt - domesticStatus[1].clearCnt}
+                  colorIndex={1}
+                />
+              </CoronaBoardCardMolecule>
+              <CoronaBoardCardMolecule>
+                <CoronaBoardCardAtom
+                  title={'사망자'}
+                  count={domesticStatus[0].deathCnt}
+                  difference={domesticStatus[0].deathCnt - domesticStatus[1].deathCnt}
+                  colorIndex={2}
+                />
+                <CoronaBoardCardAtom
+                  title={'검사진행'}
+                  count={domesticStatus[0].examCnt}
+                  difference={domesticStatus[0].examCnt - domesticStatus[1].examCnt}
+                  colorIndex={3}
+                />
+              </CoronaBoardCardMolecule>
+            </>
+          )}
         </CoronaBoardCard>
         {/* 1 */}
         <CoronaBoardCard key={'1'}>
-          <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} colorIndex={0} />
-            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} colorIndex={1} />
-          </CoronaBoardCardMolecule>
-          <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} colorIndex={2} />
-            <CoronaBoardCardAtom title={'치료 중'} count={141476} difference={478} colorIndex={3} />
-          </CoronaBoardCardMolecule>
+          {regionalStatus && (
+            <>
+              <CoronaBoardCardMolecule>
+                <CoronaBoardCardAtom
+                  title={'확진자'}
+                  count={regionalStatus[0].defCnt}
+                  difference={regionalStatus[0].defCnt - regionalStatus[1].defCnt}
+                  colorIndex={0}
+                />
+                <CoronaBoardCardAtom
+                  title={'사망자'}
+                  count={regionalStatus[0].deathCnt}
+                  difference={regionalStatus[0].deathCnt - regionalStatus[1].deathCnt}
+                  colorIndex={1}
+                />
+              </CoronaBoardCardMolecule>
+              <CoronaBoardCardMolecule>
+                <CoronaBoardCardAtom
+                  title={'격리해제'}
+                  count={regionalStatus[0].isolClearCnt}
+                  difference={regionalStatus[0].isolClearCnt - regionalStatus[1].isolClearCnt}
+                  colorIndex={2}
+                />
+                <CoronaBoardCardAtom
+                  title={'치료 중'}
+                  count={regionalStatus[0].isolIngCnt}
+                  difference={regionalStatus[0].isolIngCnt - regionalStatus[1].isolIngCnt}
+                  colorIndex={3}
+                />
+              </CoronaBoardCardMolecule>
+            </>
+          )}
         </CoronaBoardCard>
         {/* 2 */}
         <CoronaBoardCard key={'2'}>
-          <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'일일 확진자'} count={459} difference={0} colorIndex={2} />
-          </CoronaBoardCardMolecule>
-          <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'국내발생'} count={141476} difference={478} colorIndex={0} />
-            <CoronaBoardCardAtom title={'해외유입'} count={141476} difference={478} colorIndex={1} />
-          </CoronaBoardCardMolecule>
+          {regionalStatus && (
+            <>
+              <CoronaBoardCardMolecule>
+                <CoronaBoardCardAtom
+                  title={'일일 확진자'}
+                  count={regionalStatus[0].incDec}
+                  difference={regionalStatus[0].incDec - regionalStatus[1].incDec}
+                  colorIndex={2}
+                />
+              </CoronaBoardCardMolecule>
+              <CoronaBoardCardMolecule>
+                <CoronaBoardCardAtom
+                  title={'국내발생'}
+                  count={regionalStatus[0].localOccCnt}
+                  difference={regionalStatus[0].localOccCnt - regionalStatus[1].localOccCnt}
+                  colorIndex={0}
+                />
+                <CoronaBoardCardAtom
+                  title={'해외유입'}
+                  count={regionalStatus[0].overFlowCnt}
+                  difference={regionalStatus[0].overFlowCnt - regionalStatus[1].overFlowCnt}
+                  colorIndex={1}
+                />
+              </CoronaBoardCardMolecule>
+            </>
+          )}
         </CoronaBoardCard>
+        {/* 3 */}
         <CoronaBoardCard key={'3'}>
           <Text
             style={{
