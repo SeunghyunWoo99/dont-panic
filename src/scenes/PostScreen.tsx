@@ -44,10 +44,13 @@ const CARD_HEIGHT = scale(200)
 
 /** 코로나 관련 현황을 보여주는 개별 카드 */
 const CoronaBoardCard = styled(View)`
+  flex: 1;
   width: ${CARD_WIDTH};
   height: ${CARD_HEIGHT};
   margin-horizontal: ${CARD_MARGIN_HORIZONTAL};
   margin-vertical: ${scale(24)};
+  padding-horizontal: ${scale(16)};
+  padding-vertical: ${scale(12)};
   border-radius: ${scale(6)};
   shadow-offset: 8px 8px;
   shadow-opacity: 0.1;
@@ -55,6 +58,21 @@ const CoronaBoardCard = styled(View)`
   align-items: center;
   justify-content: center;
 `
+
+const CoronaBoardCardMolecule = styled(View)`
+  flex: 1;
+  flex-direction: row;
+`
+
+const CoronaBoardCardAtom = (props: { title: string; count: number; difference: number }) => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>{props.title}</Text>
+      <Text>{props.count}</Text>
+      <Text>{props.difference}</Text>
+    </View>
+  )
+}
 
 /** 코로나 카드들이 수평으로 위치한 보드 */
 function CoronaBoard() {
@@ -67,10 +85,47 @@ function CoronaBoard() {
         showsHorizontalScrollIndicator={false}
         decelerationRate={0.9}
         // ScrollView를 페이징 되게 하는 props들, 카드를 넘기 듯이 snap 됨
-        snapToInterval={CARD_WIDTH * 2 * CARD_MARGIN_HORIZONTAL}
+        snapToInterval={CARD_WIDTH + 2 * CARD_MARGIN_HORIZONTAL}
         snapToAlignment="center">
-        <CoronaBoardCard />
-        <CoronaBoardCard />
+        {/* 0 */}
+        <CoronaBoardCard key={'0'}>
+          <CoronaBoardCardMolecule>
+            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} />
+          </CoronaBoardCardMolecule>
+          <CoronaBoardCardMolecule>
+            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'검사진행'} count={141476} difference={478} />
+          </CoronaBoardCardMolecule>
+        </CoronaBoardCard>
+        {/* 1 */}
+        <CoronaBoardCard key={'1'}>
+          <CoronaBoardCardMolecule>
+            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} />
+          </CoronaBoardCardMolecule>
+          <CoronaBoardCardMolecule>
+            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'치료 중'} count={141476} difference={478} />
+          </CoronaBoardCardMolecule>
+        </CoronaBoardCard>
+        {/* 2 */}
+        <CoronaBoardCard key={'2'}>
+          <CoronaBoardCardMolecule>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Text>일일 확진자 459</Text>
+            </View>
+          </CoronaBoardCardMolecule>
+          <CoronaBoardCardMolecule>
+            <CoronaBoardCardAtom title={'국내발생'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'해외유입'} count={141476} difference={478} />
+          </CoronaBoardCardMolecule>
+        </CoronaBoardCard>
+        {/* 3 */}
+        <CoronaBoardCard key={'3'}>
+          <Text>거리두기 단계</Text>
+          <Text>2</Text>
+        </CoronaBoardCard>
       </ScrollView>
     </View>
   )
