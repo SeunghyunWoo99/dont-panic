@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
 import { parse } from 'fast-xml-parser'
@@ -349,10 +350,12 @@ function CoronaBoard() {
 }
 
 function Post(props: { data: IData }) {
+  const navigation = useNavigation()
   const { data } = props
 
   return (
     <TouchableOpacity
+      onPress={() => navigation.navigate('PostWebViewScreen', { uri: data.url })}
       style={{
         width: '100%',
         height: 100,
