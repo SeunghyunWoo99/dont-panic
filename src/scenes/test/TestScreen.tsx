@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { scale, verticalScale } from 'react-native-size-matters'
-import { size } from 'utils'
+import { color, size } from 'utils'
 
 /** 질문 카드의 너비: 전체 화면 너비 */
 const CARD_WIDTH = size.screenWidth
@@ -81,10 +81,14 @@ function TestCard(props: ITestCardProps) {
               justifyContent: 'center',
               margin: scale(8),
               paddingLeft: scale(32),
+              opacity: 1,
               // 선택된 답변은 하이라이트
-              backgroundColor: index.toString() === props.answers[props.cardIndex] ? '#57B1A666' : '#f5f5f5',
+              backgroundColor:
+                index.toString() === props.answers[props.cardIndex]
+                  ? `${color.button.primary}66`
+                  : `${color.button.disabled.primary}88`,
             }}>
-            <Text>{item}</Text>
+            <Text style={{ fontSize: scale(14), color: color.text.primary }}>{item}</Text>
           </TouchableOpacity>
         ))}
       </View>

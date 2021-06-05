@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
 import { parse } from 'fast-xml-parser'
 import moment from 'moment'
-import { API_KEY, size } from 'utils'
+import { API_KEY, color, size } from 'utils'
 
 interface IData {
   key: string
@@ -328,18 +328,18 @@ function CoronaBoard() {
               fontSize: scale(20),
               fontWeight: 'bold',
               top: -scale(16),
-              color: '#333',
+              color: color.text.primary,
             }}>
             거리두기 단계
           </Text>
-          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: '#333' }}>2</Text>
+          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: color.text.secondary }}>2</Text>
           <Text
             style={{
               fontSize: scale(12),
               position: 'absolute',
               bottom: scale(12),
               right: scale(18),
-              color: '#666',
+              color: color.text.secondary,
             }}>
             *21.5.24~6.13
           </Text>
@@ -360,7 +360,7 @@ function Post(props: { data: IData }) {
         width: '100%',
         height: 100,
         borderBottomWidth: scale(1),
-        borderColor: '#eee',
+        borderColor: color.divider,
         backgroundColor: 'white',
         paddingVertical: scale(6),
         paddingHorizontal: scale(12),
@@ -373,15 +373,15 @@ function Post(props: { data: IData }) {
             height: scale(60),
             borderRadius: scale(12),
             marginRight: scale(12),
-            backgroundColor: '#f5f5f5',
+            backgroundColor: color.background.secondary,
           }}
           source={{ uri: data.images[0] }}
         />
         <View style={{ flex: 1 }}>
-          <Text numberOfLines={2} style={{ fontSize: scale(17), color: '#333', marginBottom: scale(4) }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(17), color: color.text.primary, marginBottom: scale(4) }}>
             {data.title}
           </Text>
-          <Text numberOfLines={2} style={{ fontSize: scale(12), color: '#666' }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(12), color: color.text.secondary }}>
             {data.description}
           </Text>
         </View>

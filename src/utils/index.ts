@@ -1,4 +1,5 @@
 export { default as size } from './size'
+export { default as color } from './color'
 
 /** 보건복지부 코로나19 감염 현황 api service key */
 export const API_KEY =
