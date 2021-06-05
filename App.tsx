@@ -24,16 +24,7 @@ export default function App() {
           name="MainTabNavigator"
           component={MainTabNavigator}
           options={{
-            headerTransparent: true,
-            headerTitle: () => null,
-            headerRight: () => (
-              <Pressable
-                onPress={() => navigationRef.current?.navigate('TestStackNavigator')}
-                style={{ padding: 10, marginRight: 10 }}
-                hitSlop={10}>
-                <Text>Test</Text>
-              </Pressable>
-            ),
+            headerShown: false,
           }}
         />
         <Stack.Screen
