@@ -4,6 +4,7 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
 import Geolocation from 'react-native-geolocation-service'
 import { MainTabNavigator, TestStackNavigator } from 'navigations'
+import { PostWebViewScreen } from 'scenes'
 
 const Stack = createStackNavigator()
 
@@ -41,6 +42,14 @@ export default function App() {
           options={{
             headerShown: false,
             ...TransitionPresets.ModalTransition,
+          }}
+        />
+        <Stack.Screen
+          name="PostWebViewScreen"
+          component={PostWebViewScreen}
+          options={{
+            headerShown: false,
+            // ...TransitionPresets.ModalPresentationIOS,
           }}
         />
       </Stack.Navigator>
