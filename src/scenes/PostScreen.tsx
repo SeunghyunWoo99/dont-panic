@@ -3,6 +3,7 @@ import { Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native
 import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
 import { parse } from 'fast-xml-parser'
+import moment from 'moment'
 import { API_KEY, size } from 'utils'
 
 interface IData {
@@ -112,8 +113,9 @@ function CoronaBoard() {
   useEffect(() => {
     var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
     var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
-    queryParams += '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent('20210604')
-    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent('20210605')
+    queryParams +=
+      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
 
     fetch(url + queryParams)
       .then((response) => response.text())
@@ -126,8 +128,9 @@ function CoronaBoard() {
 
     var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
     var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
-    queryParams += '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent('20210604')
-    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent('20210605')
+    queryParams +=
+      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
 
     fetch(url + queryParams)
       .then((response) => response.text())
