@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { Text, View, FlatList, ScrollView, Image, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
@@ -354,7 +354,7 @@ function Post(props: { data: IData }) {
   const { data } = props
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => navigation.navigate('PostWebViewScreen', { uri: data.url })}
       style={{
         width: '100%',
@@ -386,14 +386,13 @@ function Post(props: { data: IData }) {
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
 export default function PostScreen() {
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ height: scale(36) }} />
       <FlatList
         keyExtractor={(item) => item.toString()}
         data={DATA}
