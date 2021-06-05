@@ -64,12 +64,19 @@ const CoronaBoardCardMolecule = styled(View)`
   flex-direction: row;
 `
 
-const CoronaBoardCardAtom = (props: { title: string; count: number; difference: number }) => {
+const CoronaBoardCardAtom = (props: { title: string; count: number; difference: number; colorIndex: number }) => {
+  const colors = ['#FF324F', '#2661FF', '#333333', '#FF8A00']
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>{props.title}</Text>
-      <Text>{props.count}</Text>
-      <Text>{props.difference}</Text>
+      <Text style={{ color: colors[props.colorIndex], fontSize: scale(14) }}>{props.title}</Text>
+      <Text
+        style={{ color: colors[props.colorIndex], fontSize: scale(18), fontWeight: 'bold', marginVertical: scale(2) }}>
+        {props.count.toLocaleString()}
+      </Text>
+      <Text style={{ color: colors[props.colorIndex], fontSize: scale(12) }}>
+        {props.difference.toLocaleString() + (props.difference > 0 ? '▲' : '▼')}
+      </Text>
     </View>
   )
 }
@@ -90,41 +97,56 @@ function CoronaBoard() {
         {/* 0 */}
         <CoronaBoardCard key={'0'}>
           <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} />
-            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} colorIndex={0} />
+            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} colorIndex={1} />
           </CoronaBoardCardMolecule>
           <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} />
-            <CoronaBoardCardAtom title={'검사진행'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} colorIndex={2} />
+            <CoronaBoardCardAtom title={'검사진행'} count={141476} difference={478} colorIndex={3} />
           </CoronaBoardCardMolecule>
         </CoronaBoardCard>
         {/* 1 */}
         <CoronaBoardCard key={'1'}>
           <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} />
-            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'확진자'} count={141476} difference={478} colorIndex={0} />
+            <CoronaBoardCardAtom title={'사망자'} count={141476} difference={478} colorIndex={1} />
           </CoronaBoardCardMolecule>
           <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} />
-            <CoronaBoardCardAtom title={'치료 중'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'격리해제'} count={141476} difference={478} colorIndex={2} />
+            <CoronaBoardCardAtom title={'치료 중'} count={141476} difference={478} colorIndex={3} />
           </CoronaBoardCardMolecule>
         </CoronaBoardCard>
         {/* 2 */}
         <CoronaBoardCard key={'2'}>
           <CoronaBoardCardMolecule>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Text>일일 확진자 459</Text>
-            </View>
+            <CoronaBoardCardAtom title={'일일 확진자'} count={459} difference={0} colorIndex={2} />
           </CoronaBoardCardMolecule>
           <CoronaBoardCardMolecule>
-            <CoronaBoardCardAtom title={'국내발생'} count={141476} difference={478} />
-            <CoronaBoardCardAtom title={'해외유입'} count={141476} difference={478} />
+            <CoronaBoardCardAtom title={'국내발생'} count={141476} difference={478} colorIndex={0} />
+            <CoronaBoardCardAtom title={'해외유입'} count={141476} difference={478} colorIndex={1} />
           </CoronaBoardCardMolecule>
         </CoronaBoardCard>
-        {/* 3 */}
         <CoronaBoardCard key={'3'}>
-          <Text>거리두기 단계</Text>
-          <Text>2</Text>
+          <Text
+            style={{
+              fontSize: scale(20),
+              fontWeight: 'bold',
+              top: -scale(16),
+              color: '#333',
+            }}>
+            거리두기 단계
+          </Text>
+          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: '#333' }}>2</Text>
+          <Text
+            style={{
+              fontSize: scale(12),
+              position: 'absolute',
+              bottom: scale(12),
+              right: scale(18),
+              color: '#666',
+            }}>
+            *21.5.24~6.13
+          </Text>
         </CoronaBoardCard>
       </ScrollView>
     </View>
