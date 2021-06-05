@@ -65,7 +65,7 @@ function TestCard(props: ITestCardProps) {
           <TouchableOpacity
             key={index.toString()}
             onPress={() => {
-              props.setAnswers(prev => {
+              props.setAnswers((prev) => {
                 const array = [...prev]
                 // 답변 선택 시 array 업데이트
                 array[props.cardIndex] = index.toString()
@@ -115,11 +115,11 @@ export default function TestScreen() {
           method: 'GET',
         },
       )
-        .then(response => response.json())
-        .then(result => {
+        .then((response) => response.json())
+        .then((result) => {
           navigation.navigate('ResultScreen', { score: result.score })
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('코로나 자가 진단 결과를 불러오지 못 함', error)
         })
     }
@@ -131,6 +131,7 @@ export default function TestScreen() {
       <ScrollView
         horizontal
         pagingEnabled
+        bounces={false}
         ref={scrollViewRef}
         showsHorizontalScrollIndicator={false}
         decelerationRate={0.9}
