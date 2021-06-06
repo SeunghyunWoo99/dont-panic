@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, ScrollView, Image, Pressable } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Text, View, FlatList, ScrollView, Image, Pressable, StyleSheet, Animated, Easing } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
-import { scale } from 'react-native-size-matters'
+import AnimatedLottieView from 'lottie-react-native'
+import LottieView from 'lottie-react-native'
+import { scale, verticalScale } from 'react-native-size-matters'
 import { parse } from 'fast-xml-parser'
 import moment from 'moment'
 import { API_KEY, color, size } from 'utils'
@@ -110,6 +112,32 @@ const CARD_MARGIN_HORIZONTAL = size.screenWidth * 0.08
 /** 보드 카드의 높이: 전체 화면 높이 */
 const CARD_HEIGHT = scale(200)
 
+const refreshAnimation = require('lotties/refresh1.json')
+
+const refreshingHeight = verticalScale(120)
+
+const styles = StyleSheet.create({
+  row: {
+    height: verticalScale(100),
+    justifyContent: 'center',
+    padding: 20,
+    borderBottomWidth: 3,
+    borderBottomColor: 'black',
+    backgroundColor: 'white',
+  },
+  rowTitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  lottieView: {
+    height: refreshingHeight - verticalScale(20),
+    position: 'absolute',
+    top: 5,
+    left: 0,
+    right: 0,
+  },
+})
+
 /** 코로나 관련 현황을 보여주는 개별 카드 */
 const CoronaBoardCard = styled(View)`
   flex: 1;
@@ -117,6 +145,7 @@ const CoronaBoardCard = styled(View)`
   height: ${CARD_HEIGHT};
   margin-horizontal: ${CARD_MARGIN_HORIZONTAL};
   margin-vertical: ${scale(24)};
+  margin-top: ${scale(36)};
   padding-horizontal: ${scale(16)};
   padding-vertical: ${scale(12)};
   border-radius: ${scale(6)};
@@ -212,7 +241,8 @@ function CoronaBoard() {
   }, [])
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color.background.secondary }}>
       {/* 수평으로 scroll 되는 ScrollView */}
       <ScrollView
         horizontal
@@ -391,13 +421,81 @@ function Post(props: { data: IData }) {
 }
 
 export default function PostScreen() {
+  const [offsetY, setOffsetY] = useState(0)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [extraPaddingTop] = useState(new Animated.Value(0))
+
+  const lottieViewRef = useRef<AnimatedLottieView>(null)
+
+  useEffect(() => {
+    if (isRefreshing) {
+      Animated.timing(extraPaddingTop, {
+        toValue: refreshingHeight,
+        duration: 0,
+        useNativeDriver: false,
+      }).start()
+      lottieViewRef.current?.play()
+    } else {
+      Animated.timing(extraPaddingTop, {
+        toValue: 0,
+        duration: 400,
+        easing: Easing.elastic(1.3),
+        useNativeDriver: false,
+      }).start()
+    }
+  }, [extraPaddingTop, isRefreshing])
+
+  function onScroll(event) {
+    const { nativeEvent } = event
+    const { contentOffset } = nativeEvent
+    const { y } = contentOffset
+    setOffsetY(y)
+  }
+
+  function onRelease() {
+    if (offsetY <= -refreshingHeight && !isRefreshing) {
+      setIsRefreshing(true)
+      setTimeout(() => {
+        setIsRefreshing(false)
+      }, 3000)
+    }
+  }
+
+  let progress = 0
+
+  if (offsetY < 0 && !isRefreshing) {
+    progress = offsetY / -refreshingHeight
+  }
+
   return (
     <View style={{ flex: 1 }}>
+      <View
+        style={{
+          width: size.screenWidth,
+          height: verticalScale(300),
+          backgroundColor: '#b8d4b9',
+          position: 'absolute',
+        }}
+      />
+      <LottieView
+        ref={lottieViewRef}
+        style={styles.lottieView}
+        source={refreshAnimation}
+        progress={progress}
+        loop={false}
+      />
+      <Animated.View
+        style={{
+          paddingTop: extraPaddingTop,
+        }}
+      />
       <FlatList
         keyExtractor={(item) => item.toString()}
         data={DATA}
         renderItem={(item) => <Post data={item.item} />}
         ListHeaderComponent={<CoronaBoard />}
+        onScroll={onScroll}
+        onResponderRelease={onRelease}
       />
     </View>
   )
