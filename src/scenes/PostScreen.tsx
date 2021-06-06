@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Text, View, FlatList, ScrollView, Image, Pressable, StyleSheet, Animated, Easing } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
@@ -199,47 +199,7 @@ interface IRegionalStatus {
 }
 
 /** 코로나 카드들이 수평으로 위치한 보드 */
-function CoronaBoard() {
-  /** 국내 전체 발생 현황 */
-  const [domesticStatus, setDomesticStatus] = useState<IDomecticStatus[]>()
-  /** 지역 발생 현황 */
-  const [regionalStatus, setRegionalStatus] = useState<IRegionalStatus[]>()
-
-  useEffect(() => {
-    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
-    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
-    queryParams +=
-      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
-    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
-
-    fetch(url + queryParams)
-      .then((response) => response.text())
-      .then((responseText) => {
-        setDomesticStatus(parse(responseText).response.body.items.item)
-      })
-      .catch((error) => {
-        console.log('코로나 현황 불러오기 실패: ', error)
-      })
-
-    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
-    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
-    queryParams +=
-      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
-    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
-
-    fetch(url + queryParams)
-      .then((response) => response.text())
-      .then((responseText) => {
-        setRegionalStatus(
-          // FIXME: 실제 지역 연결 전 임시로 서울로 설정
-          parse(responseText).response.body.items.item.filter((status: IRegionalStatus) => status.gubun === '서울'),
-        )
-      })
-      .catch((error) => {
-        console.log('코로나 시도별 현황 불러오기 실패: ', error)
-      })
-  }, [])
-
+function CoronaBoard(props: { domesticStatus?: IDomecticStatus[]; regionalStatus?: IRegionalStatus[] }) {
   return (
     <View
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color.background.secondary }}>
@@ -254,33 +214,33 @@ function CoronaBoard() {
         snapToAlignment="center">
         {/* 0 */}
         <CoronaBoardCard key={'0'}>
-          {domesticStatus && (
+          {props.domesticStatus && (
             <>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={domesticStatus[0]?.decideCnt ?? '--'}
-                  difference={domesticStatus[0]?.decideCnt - domesticStatus[1]?.decideCnt ?? '--'}
+                  count={props.domesticStatus[0]?.decideCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.decideCnt - props.domesticStatus[1]?.decideCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={domesticStatus[0]?.clearCnt ?? '--'}
-                  difference={domesticStatus[0]?.clearCnt - domesticStatus[1]?.clearCnt ?? '--'}
+                  count={props.domesticStatus[0]?.clearCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.clearCnt - props.domesticStatus[1]?.clearCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={domesticStatus[0]?.deathCnt ?? '--'}
-                  difference={domesticStatus[0]?.deathCnt - domesticStatus[1]?.deathCnt ?? '--'}
+                  count={props.domesticStatus[0]?.deathCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.deathCnt - props.domesticStatus[1]?.deathCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'검사진행'}
-                  count={domesticStatus[0]?.examCnt ?? '--'}
-                  difference={domesticStatus[0]?.examCnt - domesticStatus[1]?.examCnt ?? '--'}
+                  count={props.domesticStatus[0]?.examCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.examCnt - props.domesticStatus[1]?.examCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -289,33 +249,33 @@ function CoronaBoard() {
         </CoronaBoardCard>
         {/* 1 */}
         <CoronaBoardCard key={'1'}>
-          {regionalStatus && (
+          {props.regionalStatus && (
             <>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={regionalStatus[0]?.defCnt ?? '--'}
-                  difference={regionalStatus[0]?.defCnt - regionalStatus[1]?.defCnt ?? '--'}
+                  count={props.regionalStatus[0]?.defCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.defCnt - props.regionalStatus[1]?.defCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={regionalStatus[0]?.deathCnt ?? '--'}
-                  difference={regionalStatus[0]?.deathCnt - regionalStatus[1]?.deathCnt ?? '--'}
+                  count={props.regionalStatus[0]?.deathCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.deathCnt - props.regionalStatus[1]?.deathCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={regionalStatus[0]?.isolClearCnt ?? '--'}
-                  difference={regionalStatus[0]?.isolClearCnt - regionalStatus[1]?.isolClearCnt ?? '--'}
+                  count={props.regionalStatus[0]?.isolClearCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.isolClearCnt - props.regionalStatus[1]?.isolClearCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'치료 중'}
-                  count={regionalStatus[0]?.isolIngCnt ?? '--'}
-                  difference={regionalStatus[0]?.isolIngCnt - regionalStatus[1]?.isolIngCnt ?? '--'}
+                  count={props.regionalStatus[0]?.isolIngCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.isolIngCnt - props.regionalStatus[1]?.isolIngCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -324,27 +284,27 @@ function CoronaBoard() {
         </CoronaBoardCard>
         {/* 2 */}
         <CoronaBoardCard key={'2'}>
-          {regionalStatus && (
+          {props.regionalStatus && (
             <>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'일일 확진자'}
-                  count={regionalStatus[0]?.incDec ?? '--'}
-                  difference={regionalStatus[0]?.incDec - regionalStatus[1]?.incDec ?? '--'}
+                  count={props.regionalStatus[0]?.incDec ?? '--'}
+                  difference={props.regionalStatus[0]?.incDec - props.regionalStatus[1]?.incDec ?? '--'}
                   colorIndex={2}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'국내발생'}
-                  count={regionalStatus[0]?.localOccCnt ?? '--'}
-                  difference={regionalStatus[0]?.localOccCnt - regionalStatus[1]?.localOccCnt ?? '--'}
+                  count={props.regionalStatus[0]?.localOccCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.localOccCnt - props.regionalStatus[1]?.localOccCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'해외유입'}
-                  count={regionalStatus[0]?.overFlowCnt ?? '--'}
-                  difference={regionalStatus[0]?.overFlowCnt - regionalStatus[1]?.overFlowCnt ?? '--'}
+                  count={props.regionalStatus[0]?.overFlowCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.overFlowCnt - props.regionalStatus[1]?.overFlowCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
@@ -427,6 +387,50 @@ export default function PostScreen() {
 
   const lottieViewRef = useRef<AnimatedLottieView>(null)
 
+  /** 국내 전체 발생 현황 */
+  const [domesticStatus, setDomesticStatus] = useState<IDomecticStatus[]>()
+  /** 지역 발생 현황 */
+  const [regionalStatus, setRegionalStatus] = useState<IRegionalStatus[]>()
+
+  const fetchData = useCallback(() => {
+    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
+    queryParams +=
+      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
+
+    fetch(url + queryParams)
+      .then((response) => response.text())
+      .then((responseText) => {
+        setDomesticStatus(parse(responseText).response.body.items.item)
+      })
+      .catch((error) => {
+        console.log('코로나 현황 불러오기 실패: ', error)
+      })
+
+    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
+    queryParams +=
+      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
+
+    fetch(url + queryParams)
+      .then((response) => response.text())
+      .then((responseText) => {
+        setRegionalStatus(
+          // FIXME: 실제 지역 연결 전 임시로 서울로 설정
+          parse(responseText).response.body.items.item.filter((status: IRegionalStatus) => status.gubun === '서울'),
+        )
+      })
+      .catch((error) => {
+        console.log('코로나 시도별 현황 불러오기 실패: ', error)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
   useEffect(() => {
     if (isRefreshing) {
       Animated.timing(extraPaddingTop, {
@@ -457,6 +461,7 @@ export default function PostScreen() {
       setIsRefreshing(true)
       setTimeout(() => {
         setIsRefreshing(false)
+        fetchData()
       }, 3000)
     }
   }
@@ -493,7 +498,7 @@ export default function PostScreen() {
         keyExtractor={(item) => item.toString()}
         data={DATA}
         renderItem={(item) => <Post data={item.item} />}
-        ListHeaderComponent={<CoronaBoard />}
+        ListHeaderComponent={<CoronaBoard domesticStatus={domesticStatus} regionalStatus={regionalStatus} />}
         onScroll={onScroll}
         onResponderRelease={onRelease}
       />
