@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
 import { scale, verticalScale } from 'react-native-size-matters'
+import { Test } from 'assets/svgs'
 
 const Tag = styled(TouchableOpacity)`
   background-color: white;
@@ -90,9 +91,25 @@ export default function MapScreen() {
       </MapView>
       <Pressable
         onPress={() => navigation.navigate('TestStackNavigator')}
-        style={{ padding: 10, marginRight: 10, position: 'absolute', top: verticalScale(24), right: scale(6) }}
+        style={{
+          padding: 10,
+          marginRight: 10,
+          position: 'absolute',
+          top: verticalScale(24),
+          right: scale(6),
+          backgroundColor: '#fff',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: scale(52),
+          height: scale(52),
+          borderRadius: scale(26),
+          shadowColor: '#000',
+          shadowOffset: { width: 4, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
+        }}
         hitSlop={10}>
-        <Text>Test</Text>
+        <Test width={scale(32)} height={scale(32)} style={{ left: scale(3) }} />
       </Pressable>
       <View style={{ position: 'absolute', marginHorizontal: scale(16), marginTop: scale(24), flexDirection: 'row' }}>
         <Tag
