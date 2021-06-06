@@ -113,7 +113,7 @@ export default function MapScreen() {
         ))}
       </MapView>
       <Pressable
-        onPress={() => navigation.navigate('TestStackNavigator')}
+        onPress={() => navigation.navigate('TestStackNavigator', { screen: 'TestScreen' })}
         style={{
           padding: 10,
           marginRight: 10,
