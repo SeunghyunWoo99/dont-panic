@@ -332,7 +332,7 @@ function CoronaBoard() {
             }}>
             거리두기 단계
           </Text>
-          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: color.text.secondary }}>2</Text>
+          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: color.text.primary }}>2</Text>
           <Text
             style={{
               fontSize: scale(12),
@@ -369,8 +369,8 @@ function Post(props: { data: IData }) {
       <View style={{ flexDirection: 'row' }}>
         <Image
           style={{
-            width: scale(60),
-            height: scale(60),
+            width: scale(64),
+            height: scale(64),
             borderRadius: scale(12),
             marginRight: scale(12),
             backgroundColor: color.background.secondary,
@@ -378,10 +378,10 @@ function Post(props: { data: IData }) {
           source={{ uri: data.images[0] }}
         />
         <View style={{ flex: 1 }}>
-          <Text numberOfLines={2} style={{ fontSize: scale(17), color: color.text.primary, marginBottom: scale(4) }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(15), color: color.text.primary, marginBottom: scale(4) }}>
             {data.title}
           </Text>
-          <Text numberOfLines={2} style={{ fontSize: scale(12), color: color.text.secondary }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(11), color: color.text.secondary }}>
             {data.description}
           </Text>
         </View>
