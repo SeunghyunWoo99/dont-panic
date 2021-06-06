@@ -5,16 +5,20 @@ import styled from 'styled-components'
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
 import { scale, verticalScale } from 'react-native-size-matters'
-import { Test } from 'assets/svgs'
+import { Test, HospitalCorona, HospitalNormal } from 'assets/svgs'
+import { color } from 'utils'
 
 const Tag = styled(TouchableOpacity)`
   background-color: white;
-  height: ${scale(24)};
-  padding-horizontal: ${scale(6)};
-  border-radius: ${scale(12)};
+  height: ${scale(28)};
+  padding-horizontal: ${scale(10)};
+  border-radius: ${scale(14)};
   align-items: center;
   justify-content: center;
   margin-right: ${scale(8)};
+  flex-direction: row;
+  shadow-offset: 8px 8px;
+  shadow-opacity: 0.1;
 `
 
 export default function MapScreen() {
@@ -111,7 +115,13 @@ export default function MapScreen() {
         hitSlop={10}>
         <Test width={scale(32)} height={scale(32)} style={{ left: scale(3) }} />
       </Pressable>
-      <View style={{ position: 'absolute', marginHorizontal: scale(16), marginTop: scale(24), flexDirection: 'row' }}>
+      <View
+        style={{
+          position: 'absolute',
+          marginHorizontal: scale(16),
+          marginTop: verticalScale(30),
+          flexDirection: 'row',
+        }}>
         <Tag
           onPress={() => {
             fetch('http://52.78.126.183:3000/ows/covid-hospital', {
@@ -126,7 +136,8 @@ export default function MapScreen() {
                 console.error('코로나 안심 병원을 불러오지 못함', error)
               })
           }}>
-          <Text>#코로나 안심 병원</Text>
+          <HospitalCorona width={scale(15)} height={scale(15)} style={{ marginRight: scale(4) }} />
+          <Text style={{ fontSize: scale(13), color: color.text.primary }}>코로나 안심 병원</Text>
         </Tag>
         <Tag
           onPress={() => {
@@ -145,7 +156,8 @@ export default function MapScreen() {
                 console.error('일반 진료 병원을 불러오지 못함', error)
               })
           }}>
-          <Text>#일반 진료</Text>
+          <HospitalNormal width={scale(15)} height={scale(15)} style={{ marginRight: scale(4) }} />
+          <Text style={{ fontSize: scale(13), color: color.text.primary }}>일반 진료</Text>
         </Tag>
       </View>
     </View>
