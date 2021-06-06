@@ -229,28 +229,28 @@ function CoronaBoard() {
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={domesticStatus[0].decideCnt}
-                  difference={domesticStatus[0].decideCnt - domesticStatus[1].decideCnt}
+                  count={domesticStatus[0]?.decideCnt ?? '--'}
+                  difference={domesticStatus[0]?.decideCnt - domesticStatus[1]?.decideCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={domesticStatus[0].clearCnt}
-                  difference={domesticStatus[0].clearCnt - domesticStatus[1].clearCnt}
+                  count={domesticStatus[0]?.clearCnt ?? '--'}
+                  difference={domesticStatus[0]?.clearCnt - domesticStatus[1]?.clearCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={domesticStatus[0].deathCnt}
-                  difference={domesticStatus[0].deathCnt - domesticStatus[1].deathCnt}
+                  count={domesticStatus[0]?.deathCnt ?? '--'}
+                  difference={domesticStatus[0]?.deathCnt - domesticStatus[1]?.deathCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'검사진행'}
-                  count={domesticStatus[0].examCnt}
-                  difference={domesticStatus[0].examCnt - domesticStatus[1].examCnt}
+                  count={domesticStatus[0]?.examCnt ?? '--'}
+                  difference={domesticStatus[0]?.examCnt - domesticStatus[1]?.examCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -264,28 +264,28 @@ function CoronaBoard() {
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={regionalStatus[0].defCnt}
-                  difference={regionalStatus[0].defCnt - regionalStatus[1].defCnt}
+                  count={regionalStatus[0]?.defCnt ?? '--'}
+                  difference={regionalStatus[0]?.defCnt - regionalStatus[1]?.defCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={regionalStatus[0].deathCnt}
-                  difference={regionalStatus[0].deathCnt - regionalStatus[1].deathCnt}
+                  count={regionalStatus[0]?.deathCnt ?? '--'}
+                  difference={regionalStatus[0]?.deathCnt - regionalStatus[1]?.deathCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={regionalStatus[0].isolClearCnt}
-                  difference={regionalStatus[0].isolClearCnt - regionalStatus[1].isolClearCnt}
+                  count={regionalStatus[0]?.isolClearCnt ?? '--'}
+                  difference={regionalStatus[0]?.isolClearCnt - regionalStatus[1]?.isolClearCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'치료 중'}
-                  count={regionalStatus[0].isolIngCnt}
-                  difference={regionalStatus[0].isolIngCnt - regionalStatus[1].isolIngCnt}
+                  count={regionalStatus[0]?.isolIngCnt ?? '--'}
+                  difference={regionalStatus[0]?.isolIngCnt - regionalStatus[1]?.isolIngCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -299,22 +299,22 @@ function CoronaBoard() {
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'일일 확진자'}
-                  count={regionalStatus[0].incDec}
-                  difference={regionalStatus[0].incDec - regionalStatus[1].incDec}
+                  count={regionalStatus[0]?.incDec ?? '--'}
+                  difference={regionalStatus[0]?.incDec - regionalStatus[1]?.incDec ?? '--'}
                   colorIndex={2}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'국내발생'}
-                  count={regionalStatus[0].localOccCnt}
-                  difference={regionalStatus[0].localOccCnt - regionalStatus[1].localOccCnt}
+                  count={regionalStatus[0]?.localOccCnt ?? '--'}
+                  difference={regionalStatus[0]?.localOccCnt - regionalStatus[1]?.localOccCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'해외유입'}
-                  count={regionalStatus[0].overFlowCnt}
-                  difference={regionalStatus[0].overFlowCnt - regionalStatus[1].overFlowCnt}
+                  count={regionalStatus[0]?.overFlowCnt ?? '--'}
+                  difference={regionalStatus[0]?.overFlowCnt - regionalStatus[1]?.overFlowCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
