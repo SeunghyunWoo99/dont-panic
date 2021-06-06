@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { scale } from 'react-native-size-matters'
 import { parse } from 'fast-xml-parser'
 import moment from 'moment'
-import { API_KEY, size } from 'utils'
+import { API_KEY, color, size } from 'utils'
 
 interface IData {
   key: string
@@ -229,28 +229,28 @@ function CoronaBoard() {
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={domesticStatus[0].decideCnt}
-                  difference={domesticStatus[0].decideCnt - domesticStatus[1].decideCnt}
+                  count={domesticStatus[0]?.decideCnt ?? '--'}
+                  difference={domesticStatus[0]?.decideCnt - domesticStatus[1]?.decideCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={domesticStatus[0].clearCnt}
-                  difference={domesticStatus[0].clearCnt - domesticStatus[1].clearCnt}
+                  count={domesticStatus[0]?.clearCnt ?? '--'}
+                  difference={domesticStatus[0]?.clearCnt - domesticStatus[1]?.clearCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={domesticStatus[0].deathCnt}
-                  difference={domesticStatus[0].deathCnt - domesticStatus[1].deathCnt}
+                  count={domesticStatus[0]?.deathCnt ?? '--'}
+                  difference={domesticStatus[0]?.deathCnt - domesticStatus[1]?.deathCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'검사진행'}
-                  count={domesticStatus[0].examCnt}
-                  difference={domesticStatus[0].examCnt - domesticStatus[1].examCnt}
+                  count={domesticStatus[0]?.examCnt ?? '--'}
+                  difference={domesticStatus[0]?.examCnt - domesticStatus[1]?.examCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -264,28 +264,28 @@ function CoronaBoard() {
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={regionalStatus[0].defCnt}
-                  difference={regionalStatus[0].defCnt - regionalStatus[1].defCnt}
+                  count={regionalStatus[0]?.defCnt ?? '--'}
+                  difference={regionalStatus[0]?.defCnt - regionalStatus[1]?.defCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={regionalStatus[0].deathCnt}
-                  difference={regionalStatus[0].deathCnt - regionalStatus[1].deathCnt}
+                  count={regionalStatus[0]?.deathCnt ?? '--'}
+                  difference={regionalStatus[0]?.deathCnt - regionalStatus[1]?.deathCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={regionalStatus[0].isolClearCnt}
-                  difference={regionalStatus[0].isolClearCnt - regionalStatus[1].isolClearCnt}
+                  count={regionalStatus[0]?.isolClearCnt ?? '--'}
+                  difference={regionalStatus[0]?.isolClearCnt - regionalStatus[1]?.isolClearCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'치료 중'}
-                  count={regionalStatus[0].isolIngCnt}
-                  difference={regionalStatus[0].isolIngCnt - regionalStatus[1].isolIngCnt}
+                  count={regionalStatus[0]?.isolIngCnt ?? '--'}
+                  difference={regionalStatus[0]?.isolIngCnt - regionalStatus[1]?.isolIngCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -299,22 +299,22 @@ function CoronaBoard() {
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'일일 확진자'}
-                  count={regionalStatus[0].incDec}
-                  difference={regionalStatus[0].incDec - regionalStatus[1].incDec}
+                  count={regionalStatus[0]?.incDec ?? '--'}
+                  difference={regionalStatus[0]?.incDec - regionalStatus[1]?.incDec ?? '--'}
                   colorIndex={2}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'국내발생'}
-                  count={regionalStatus[0].localOccCnt}
-                  difference={regionalStatus[0].localOccCnt - regionalStatus[1].localOccCnt}
+                  count={regionalStatus[0]?.localOccCnt ?? '--'}
+                  difference={regionalStatus[0]?.localOccCnt - regionalStatus[1]?.localOccCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'해외유입'}
-                  count={regionalStatus[0].overFlowCnt}
-                  difference={regionalStatus[0].overFlowCnt - regionalStatus[1].overFlowCnt}
+                  count={regionalStatus[0]?.overFlowCnt ?? '--'}
+                  difference={regionalStatus[0]?.overFlowCnt - regionalStatus[1]?.overFlowCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
@@ -328,18 +328,18 @@ function CoronaBoard() {
               fontSize: scale(20),
               fontWeight: 'bold',
               top: -scale(16),
-              color: '#333',
+              color: color.text.primary,
             }}>
             거리두기 단계
           </Text>
-          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: '#333' }}>2</Text>
+          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: color.text.secondary }}>2</Text>
           <Text
             style={{
               fontSize: scale(12),
               position: 'absolute',
               bottom: scale(12),
               right: scale(18),
-              color: '#666',
+              color: color.text.secondary,
             }}>
             *21.5.24~6.13
           </Text>
@@ -360,7 +360,7 @@ function Post(props: { data: IData }) {
         width: '100%',
         height: 100,
         borderBottomWidth: scale(1),
-        borderColor: '#eee',
+        borderColor: color.divider,
         backgroundColor: 'white',
         paddingVertical: scale(6),
         paddingHorizontal: scale(12),
@@ -373,15 +373,15 @@ function Post(props: { data: IData }) {
             height: scale(60),
             borderRadius: scale(12),
             marginRight: scale(12),
-            backgroundColor: '#f5f5f5',
+            backgroundColor: color.background.secondary,
           }}
           source={{ uri: data.images[0] }}
         />
         <View style={{ flex: 1 }}>
-          <Text numberOfLines={2} style={{ fontSize: scale(17), color: '#333', marginBottom: scale(4) }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(17), color: color.text.primary, marginBottom: scale(4) }}>
             {data.title}
           </Text>
-          <Text numberOfLines={2} style={{ fontSize: scale(12), color: '#666' }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(12), color: color.text.secondary }}>
             {data.description}
           </Text>
         </View>

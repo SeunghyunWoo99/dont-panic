@@ -1,5 +1,4 @@
 export { default as MapScreen } from './MapScreen'
 export { default as PostScreen } from './PostScreen'
 export { default as PostWebViewScreen } from './PostWebViewScreen'
-export { default as TestScreen } from './TestScreen'
-export { default as ResultScreen } from './ResultScreen'
+export { TestScreen, ResultScreen, TutorialScreen } from './test'

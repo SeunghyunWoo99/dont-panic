@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { scale, verticalScale } from 'react-native-size-matters'
-import { size } from 'utils'
+import { color, size } from 'utils'
 
 /** 질문 카드의 너비: 전체 화면 너비 */
 const CARD_WIDTH = size.screenWidth
@@ -65,7 +65,7 @@ function TestCard(props: ITestCardProps) {
           <TouchableOpacity
             key={index.toString()}
             onPress={() => {
-              props.setAnswers(prev => {
+              props.setAnswers((prev) => {
                 const array = [...prev]
                 // 답변 선택 시 array 업데이트
                 array[props.cardIndex] = index.toString()
@@ -81,10 +81,14 @@ function TestCard(props: ITestCardProps) {
               justifyContent: 'center',
               margin: scale(8),
               paddingLeft: scale(32),
+              opacity: 1,
               // 선택된 답변은 하이라이트
-              backgroundColor: index.toString() === props.answers[props.cardIndex] ? '#57B1A666' : '#f5f5f5',
+              backgroundColor:
+                index.toString() === props.answers[props.cardIndex]
+                  ? `${color.button.primary}66`
+                  : `${color.button.disabled.primary}88`,
             }}>
-            <Text>{item}</Text>
+            <Text style={{ fontSize: scale(14), color: color.text.primary }}>{item}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -115,11 +119,11 @@ export default function TestScreen() {
           method: 'GET',
         },
       )
-        .then(response => response.json())
-        .then(result => {
+        .then((response) => response.json())
+        .then((result) => {
           navigation.navigate('ResultScreen', { score: result.score })
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('코로나 자가 진단 결과를 불러오지 못 함', error)
         })
     }
@@ -131,6 +135,7 @@ export default function TestScreen() {
       <ScrollView
         horizontal
         pagingEnabled
+        bounces={false}
         ref={scrollViewRef}
         showsHorizontalScrollIndicator={false}
         decelerationRate={0.9}

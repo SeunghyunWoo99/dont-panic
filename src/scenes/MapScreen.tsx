@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { TouchableOpacity, View, Text } from 'react-native'
+import { TouchableOpacity, View, Text, Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service'
-import { scale } from 'react-native-size-matters'
+import { scale, verticalScale } from 'react-native-size-matters'
 
 const Tag = styled(TouchableOpacity)`
   background-color: white;
@@ -16,6 +17,8 @@ const Tag = styled(TouchableOpacity)`
 `
 
 export default function MapScreen() {
+  const navigation = useNavigation()
+
   const [region, setRegion] = useState<Region>({
     latitude: 0,
     longitude: 0,
@@ -85,6 +88,12 @@ export default function MapScreen() {
           />
         ))}
       </MapView>
+      <Pressable
+        onPress={() => navigation.navigate('TestStackNavigator')}
+        style={{ padding: 10, marginRight: 10, position: 'absolute', top: verticalScale(24), right: scale(6) }}
+        hitSlop={10}>
+        <Text>Test</Text>
+      </Pressable>
       <View style={{ position: 'absolute', marginHorizontal: scale(16), marginTop: scale(24), flexDirection: 'row' }}>
         <Tag
           onPress={() => {
