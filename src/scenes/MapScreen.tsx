@@ -89,8 +89,27 @@ export default function MapScreen() {
             description={`\n주소: ${hospital.addr?._text ?? hospital.addr}\n전화번호: ${
               hospital.telno?._text ?? hospital.telno
             }
-            `}
-          />
+            `}>
+            <View
+              style={{
+                width: scale(30),
+                height: scale(30),
+                borderRadius: scale(15),
+                backgroundColor: color.background.primary,
+                alignItems: 'center',
+                justifyContent: 'center',
+                shadowColor: '#000',
+                shadowOffset: { width: 4, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+              }}>
+              {hospital.YPos?._text ? (
+                <HospitalNormal width={scale(23)} height={scale(23)} />
+              ) : (
+                <HospitalCorona width={scale(23)} height={scale(23)} />
+              )}
+            </View>
+          </Marker>
         ))}
       </MapView>
       <Pressable
