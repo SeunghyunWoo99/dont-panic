@@ -23,7 +23,7 @@ export default function ResultScreen(props: { route: { params: { score: number }
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Animated.View
         style={{
-          opacity: 0.6,
+          opacity: 0.4,
           // lottie 파일을 수직으로 된 것으로 구해서 어쩔 수 없이 270도 회전, 다른 스타일도 거기에 맞춰 줌
           transform: [{ rotate: '270deg' }, { translateX }],
           height: size.screenWidth,
@@ -32,7 +32,7 @@ export default function ResultScreen(props: { route: { params: { score: number }
           bottom: -verticalScale(620),
         }}>
         {/* 구한 lottie 파일의 높이가 낮아서 밑 부분을 같은 색으로 붙여 줌 */}
-        <View style={{ backgroundColor: 'rgb(51,255,0)', height: '100%', width: size.screenHeight }} />
+        <View style={{ backgroundColor: '#75d178', opacity: 0.9, height: '100%', width: size.screenHeight }} />
         <LottieView autoPlay speed={2} style={{ height: '100%' }} source={require('lotties/wave.json')} />
       </Animated.View>
       <Text style={{ position: 'absolute', fontSize: scale(64), fontWeight: 'bold' }}>{score}</Text>
