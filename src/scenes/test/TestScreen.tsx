@@ -77,7 +77,7 @@ function TestCard(props: ITestCardProps) {
             style={{
               width: '100%',
               height: scale(56),
-              borderRadius: scale(6),
+              borderRadius: scale(28),
               justifyContent: 'center',
               margin: scale(8),
               paddingLeft: scale(32),
@@ -85,10 +85,17 @@ function TestCard(props: ITestCardProps) {
               // 선택된 답변은 하이라이트
               backgroundColor:
                 index.toString() === props.answers[props.cardIndex]
-                  ? `${color.button.primary}66`
+                  ? `${color.button.primary}`
                   : `${color.button.disabled.primary}88`,
             }}>
-            <Text style={{ fontSize: scale(14), color: color.text.primary }}>{item}</Text>
+            <Text
+              style={{
+                fontSize: scale(14),
+                fontWeight: index.toString() === props.answers[props.cardIndex] ? 'bold' : 'normal',
+                color: index.toString() === props.answers[props.cardIndex] ? color.text.button : color.text.primary,
+              }}>
+              {item}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
