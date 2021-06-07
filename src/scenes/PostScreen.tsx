@@ -112,8 +112,6 @@ const CARD_MARGIN_HORIZONTAL = size.screenWidth * 0.08
 /** 보드 카드의 높이: 전체 화면 높이 */
 const CARD_HEIGHT = scale(200)
 
-const refreshAnimation = require('lotties/refresh1.json')
-
 const refreshingHeight = verticalScale(120)
 
 const styles = StyleSheet.create({
@@ -130,9 +128,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   lottieView: {
-    height: refreshingHeight - verticalScale(20),
+    height: refreshingHeight - verticalScale(32),
     position: 'absolute',
-    top: 5,
+    top: verticalScale(8),
     left: 0,
     right: 0,
   },
@@ -391,6 +389,8 @@ export default function PostScreen() {
   const [domesticStatus, setDomesticStatus] = useState<IDomecticStatus[]>()
   /** 지역 발생 현황 */
   const [regionalStatus, setRegionalStatus] = useState<IRegionalStatus[]>()
+  /** refresh 애니메이션 다섯개 중 랜덤으로 골라 쓰기 위한 애니메이션 소스 */
+  const [source, setSource] = useState(require('lotties/refresh1.json'))
 
   const fetchData = useCallback(() => {
     var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
@@ -458,6 +458,7 @@ export default function PostScreen() {
 
   function onRelease() {
     if (offsetY <= -refreshingHeight && !isRefreshing) {
+      setSource(refreshAnimation())
       setIsRefreshing(true)
       setTimeout(() => {
         setIsRefreshing(false)
@@ -466,11 +467,20 @@ export default function PostScreen() {
     }
   }
 
-  let progress = 0
-
-  if (offsetY < 0 && !isRefreshing) {
-    progress = offsetY / -refreshingHeight
-  }
+  const refreshAnimation = useCallback(() => {
+    switch (Math.ceil(Math.random() * 5)) {
+      case 1:
+        return require('lotties/refresh1.json')
+      case 2:
+        return require('lotties/refresh2.json')
+      case 3:
+        return require('lotties/refresh3.json')
+      case 4:
+        return require('lotties/refresh4.json')
+      case 5:
+        return require('lotties/refresh5.json')
+    }
+  }, [])
 
   return (
     <View style={{ flex: 1 }}>
@@ -482,13 +492,7 @@ export default function PostScreen() {
           position: 'absolute',
         }}
       />
-      <LottieView
-        ref={lottieViewRef}
-        style={styles.lottieView}
-        source={refreshAnimation}
-        progress={progress}
-        loop={false}
-      />
+      <LottieView ref={lottieViewRef} style={styles.lottieView} source={source} loop={false} />
       <Animated.View
         style={{
           paddingTop: extraPaddingTop,
