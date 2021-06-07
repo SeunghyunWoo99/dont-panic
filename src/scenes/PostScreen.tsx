@@ -392,6 +392,7 @@ export default function PostScreen() {
   /** refresh 애니메이션 다섯개 중 랜덤으로 골라 쓰기 위한 애니메이션 소스 */
   const [source, setSource] = useState(require('lotties/refresh1.json'))
 
+  /** open API에서 데이터 fetch하는 함수 */
   const fetchData = useCallback(() => {
     var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
     var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
@@ -427,6 +428,7 @@ export default function PostScreen() {
       })
   }, [])
 
+  // 첫 랜더링에 데이터를 가져옴
   useEffect(() => {
     fetchData()
   }, [fetchData])

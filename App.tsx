@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Platform, Pressable, Text } from 'react-native'
+import { Platform } from 'react-native'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
 import Geolocation from 'react-native-geolocation-service'
@@ -23,7 +23,6 @@ export default function App() {
     AsyncStorage.getItem('isNotFirst').then((isNotFirst) => {
       if (isNotFirst !== '1') {
         setTimeout(() => navigationRef.current?.navigate('TestStackNavigator'), 2000)
-        AsyncStorage.setItem('isNotFirst', '1')
       }
     })
   }, [])
@@ -51,7 +50,6 @@ export default function App() {
           component={PostWebViewScreen}
           options={{
             headerShown: false,
-            // ...TransitionPresets.ModalPresentationIOS,
           }}
         />
       </Stack.Navigator>
