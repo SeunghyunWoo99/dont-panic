@@ -1,0 +1,7 @@
+export { default as Map } from './map.svg'
+export { default as MapActive } from './mapActive.svg'
+export { default as News } from './news.svg'
+export { default as NewsActive } from './newsActive.svg'
+export { default as Test } from './test.svg'
+export { default as HospitalCorona } from './hospitalCorona.svg'
+export { default as HospitalNormal } from './hospitalNormal.svg'

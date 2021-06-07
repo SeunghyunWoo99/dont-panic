@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, ScrollView, Image, Pressable } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Text, View, FlatList, ScrollView, Image, Pressable, StyleSheet, Animated, Easing } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
-import { scale } from 'react-native-size-matters'
+import AnimatedLottieView from 'lottie-react-native'
+import LottieView from 'lottie-react-native'
+import { scale, verticalScale } from 'react-native-size-matters'
 import { parse } from 'fast-xml-parser'
 import moment from 'moment'
 import { API_KEY, color, size } from 'utils'
@@ -110,6 +112,30 @@ const CARD_MARGIN_HORIZONTAL = size.screenWidth * 0.08
 /** 보드 카드의 높이: 전체 화면 높이 */
 const CARD_HEIGHT = scale(200)
 
+const refreshingHeight = verticalScale(120)
+
+const styles = StyleSheet.create({
+  row: {
+    height: verticalScale(100),
+    justifyContent: 'center',
+    padding: 20,
+    borderBottomWidth: 3,
+    borderBottomColor: 'black',
+    backgroundColor: 'white',
+  },
+  rowTitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  lottieView: {
+    height: refreshingHeight - verticalScale(32),
+    position: 'absolute',
+    top: verticalScale(8),
+    left: 0,
+    right: 0,
+  },
+})
+
 /** 코로나 관련 현황을 보여주는 개별 카드 */
 const CoronaBoardCard = styled(View)`
   flex: 1;
@@ -117,6 +143,7 @@ const CoronaBoardCard = styled(View)`
   height: ${CARD_HEIGHT};
   margin-horizontal: ${CARD_MARGIN_HORIZONTAL};
   margin-vertical: ${scale(24)};
+  margin-top: ${scale(36)};
   padding-horizontal: ${scale(16)};
   padding-vertical: ${scale(12)};
   border-radius: ${scale(6)};
@@ -170,49 +197,10 @@ interface IRegionalStatus {
 }
 
 /** 코로나 카드들이 수평으로 위치한 보드 */
-function CoronaBoard() {
-  /** 국내 전체 발생 현황 */
-  const [domesticStatus, setDomesticStatus] = useState<IDomecticStatus[]>()
-  /** 지역 발생 현황 */
-  const [regionalStatus, setRegionalStatus] = useState<IRegionalStatus[]>()
-
-  useEffect(() => {
-    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
-    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
-    queryParams +=
-      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
-    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
-
-    fetch(url + queryParams)
-      .then((response) => response.text())
-      .then((responseText) => {
-        setDomesticStatus(parse(responseText).response.body.items.item)
-      })
-      .catch((error) => {
-        console.log('코로나 현황 불러오기 실패: ', error)
-      })
-
-    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
-    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
-    queryParams +=
-      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
-    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
-
-    fetch(url + queryParams)
-      .then((response) => response.text())
-      .then((responseText) => {
-        setRegionalStatus(
-          // FIXME: 실제 지역 연결 전 임시로 서울로 설정
-          parse(responseText).response.body.items.item.filter((status: IRegionalStatus) => status.gubun === '서울'),
-        )
-      })
-      .catch((error) => {
-        console.log('코로나 시도별 현황 불러오기 실패: ', error)
-      })
-  }, [])
-
+function CoronaBoard(props: { domesticStatus?: IDomecticStatus[]; regionalStatus?: IRegionalStatus[] }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color.background.secondary }}>
       {/* 수평으로 scroll 되는 ScrollView */}
       <ScrollView
         horizontal
@@ -224,33 +212,33 @@ function CoronaBoard() {
         snapToAlignment="center">
         {/* 0 */}
         <CoronaBoardCard key={'0'}>
-          {domesticStatus && (
+          {props.domesticStatus && (
             <>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={domesticStatus[0]?.decideCnt ?? '--'}
-                  difference={domesticStatus[0]?.decideCnt - domesticStatus[1]?.decideCnt ?? '--'}
+                  count={props.domesticStatus[0]?.decideCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.decideCnt - props.domesticStatus[1]?.decideCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={domesticStatus[0]?.clearCnt ?? '--'}
-                  difference={domesticStatus[0]?.clearCnt - domesticStatus[1]?.clearCnt ?? '--'}
+                  count={props.domesticStatus[0]?.clearCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.clearCnt - props.domesticStatus[1]?.clearCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={domesticStatus[0]?.deathCnt ?? '--'}
-                  difference={domesticStatus[0]?.deathCnt - domesticStatus[1]?.deathCnt ?? '--'}
+                  count={props.domesticStatus[0]?.deathCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.deathCnt - props.domesticStatus[1]?.deathCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'검사진행'}
-                  count={domesticStatus[0]?.examCnt ?? '--'}
-                  difference={domesticStatus[0]?.examCnt - domesticStatus[1]?.examCnt ?? '--'}
+                  count={props.domesticStatus[0]?.examCnt ?? '--'}
+                  difference={props.domesticStatus[0]?.examCnt - props.domesticStatus[1]?.examCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -259,33 +247,33 @@ function CoronaBoard() {
         </CoronaBoardCard>
         {/* 1 */}
         <CoronaBoardCard key={'1'}>
-          {regionalStatus && (
+          {props.regionalStatus && (
             <>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'확진자'}
-                  count={regionalStatus[0]?.defCnt ?? '--'}
-                  difference={regionalStatus[0]?.defCnt - regionalStatus[1]?.defCnt ?? '--'}
+                  count={props.regionalStatus[0]?.defCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.defCnt - props.regionalStatus[1]?.defCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'사망자'}
-                  count={regionalStatus[0]?.deathCnt ?? '--'}
-                  difference={regionalStatus[0]?.deathCnt - regionalStatus[1]?.deathCnt ?? '--'}
+                  count={props.regionalStatus[0]?.deathCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.deathCnt - props.regionalStatus[1]?.deathCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'격리해제'}
-                  count={regionalStatus[0]?.isolClearCnt ?? '--'}
-                  difference={regionalStatus[0]?.isolClearCnt - regionalStatus[1]?.isolClearCnt ?? '--'}
+                  count={props.regionalStatus[0]?.isolClearCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.isolClearCnt - props.regionalStatus[1]?.isolClearCnt ?? '--'}
                   colorIndex={2}
                 />
                 <CoronaBoardCardAtom
                   title={'치료 중'}
-                  count={regionalStatus[0]?.isolIngCnt ?? '--'}
-                  difference={regionalStatus[0]?.isolIngCnt - regionalStatus[1]?.isolIngCnt ?? '--'}
+                  count={props.regionalStatus[0]?.isolIngCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.isolIngCnt - props.regionalStatus[1]?.isolIngCnt ?? '--'}
                   colorIndex={3}
                 />
               </CoronaBoardCardMolecule>
@@ -294,27 +282,27 @@ function CoronaBoard() {
         </CoronaBoardCard>
         {/* 2 */}
         <CoronaBoardCard key={'2'}>
-          {regionalStatus && (
+          {props.regionalStatus && (
             <>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'일일 확진자'}
-                  count={regionalStatus[0]?.incDec ?? '--'}
-                  difference={regionalStatus[0]?.incDec - regionalStatus[1]?.incDec ?? '--'}
+                  count={props.regionalStatus[0]?.incDec ?? '--'}
+                  difference={props.regionalStatus[0]?.incDec - props.regionalStatus[1]?.incDec ?? '--'}
                   colorIndex={2}
                 />
               </CoronaBoardCardMolecule>
               <CoronaBoardCardMolecule>
                 <CoronaBoardCardAtom
                   title={'국내발생'}
-                  count={regionalStatus[0]?.localOccCnt ?? '--'}
-                  difference={regionalStatus[0]?.localOccCnt - regionalStatus[1]?.localOccCnt ?? '--'}
+                  count={props.regionalStatus[0]?.localOccCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.localOccCnt - props.regionalStatus[1]?.localOccCnt ?? '--'}
                   colorIndex={0}
                 />
                 <CoronaBoardCardAtom
                   title={'해외유입'}
-                  count={regionalStatus[0]?.overFlowCnt ?? '--'}
-                  difference={regionalStatus[0]?.overFlowCnt - regionalStatus[1]?.overFlowCnt ?? '--'}
+                  count={props.regionalStatus[0]?.overFlowCnt ?? '--'}
+                  difference={props.regionalStatus[0]?.overFlowCnt - props.regionalStatus[1]?.overFlowCnt ?? '--'}
                   colorIndex={1}
                 />
               </CoronaBoardCardMolecule>
@@ -332,7 +320,7 @@ function CoronaBoard() {
             }}>
             거리두기 단계
           </Text>
-          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: color.text.secondary }}>2</Text>
+          <Text style={{ fontSize: scale(72), fontWeight: 'bold', color: color.text.primary }}>2</Text>
           <Text
             style={{
               fontSize: scale(12),
@@ -369,8 +357,8 @@ function Post(props: { data: IData }) {
       <View style={{ flexDirection: 'row' }}>
         <Image
           style={{
-            width: scale(60),
-            height: scale(60),
+            width: scale(64),
+            height: scale(64),
             borderRadius: scale(12),
             marginRight: scale(12),
             backgroundColor: color.background.secondary,
@@ -378,10 +366,10 @@ function Post(props: { data: IData }) {
           source={{ uri: data.images[0] }}
         />
         <View style={{ flex: 1 }}>
-          <Text numberOfLines={2} style={{ fontSize: scale(17), color: color.text.primary, marginBottom: scale(4) }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(15), color: color.text.primary, marginBottom: scale(4) }}>
             {data.title}
           </Text>
-          <Text numberOfLines={2} style={{ fontSize: scale(12), color: color.text.secondary }}>
+          <Text numberOfLines={2} style={{ fontSize: scale(11), color: color.text.secondary }}>
             {data.description}
           </Text>
         </View>
@@ -391,13 +379,134 @@ function Post(props: { data: IData }) {
 }
 
 export default function PostScreen() {
+  const [offsetY, setOffsetY] = useState(0)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [extraPaddingTop] = useState(new Animated.Value(0))
+
+  const lottieViewRef = useRef<AnimatedLottieView>(null)
+
+  /** 국내 전체 발생 현황 */
+  const [domesticStatus, setDomesticStatus] = useState<IDomecticStatus[]>()
+  /** 지역 발생 현황 */
+  const [regionalStatus, setRegionalStatus] = useState<IRegionalStatus[]>()
+  /** refresh 애니메이션 다섯개 중 랜덤으로 골라 쓰기 위한 애니메이션 소스 */
+  const [source, setSource] = useState(require('lotties/refresh1.json'))
+
+  /** open API에서 데이터 fetch하는 함수 */
+  const fetchData = useCallback(() => {
+    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson'
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
+    queryParams +=
+      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
+
+    fetch(url + queryParams)
+      .then((response) => response.text())
+      .then((responseText) => {
+        setDomesticStatus(parse(responseText).response.body.items.item)
+      })
+      .catch((error) => {
+        console.log('코로나 현황 불러오기 실패: ', error)
+      })
+
+    var url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + API_KEY
+    queryParams +=
+      '&' + encodeURIComponent('startCreateDt') + '=' + encodeURIComponent(moment().subtract(1, 'd').format('YYYYMMDD'))
+    queryParams += '&' + encodeURIComponent('endCreateDt') + '=' + encodeURIComponent(moment().format('YYYYMMDD'))
+
+    fetch(url + queryParams)
+      .then((response) => response.text())
+      .then((responseText) => {
+        setRegionalStatus(
+          // FIXME: 실제 지역 연결 전 임시로 서울로 설정
+          parse(responseText).response.body.items.item.filter((status: IRegionalStatus) => status.gubun === '서울'),
+        )
+      })
+      .catch((error) => {
+        console.log('코로나 시도별 현황 불러오기 실패: ', error)
+      })
+  }, [])
+
+  // 첫 랜더링에 데이터를 가져옴
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  useEffect(() => {
+    if (isRefreshing) {
+      Animated.timing(extraPaddingTop, {
+        toValue: refreshingHeight,
+        duration: 0,
+        useNativeDriver: false,
+      }).start()
+      lottieViewRef.current?.play()
+    } else {
+      Animated.timing(extraPaddingTop, {
+        toValue: 0,
+        duration: 400,
+        easing: Easing.elastic(1.3),
+        useNativeDriver: false,
+      }).start()
+    }
+  }, [extraPaddingTop, isRefreshing])
+
+  function onScroll(event) {
+    const { nativeEvent } = event
+    const { contentOffset } = nativeEvent
+    const { y } = contentOffset
+    setOffsetY(y)
+  }
+
+  function onRelease() {
+    if (offsetY <= -refreshingHeight && !isRefreshing) {
+      setSource(refreshAnimation())
+      setIsRefreshing(true)
+      setTimeout(() => {
+        setIsRefreshing(false)
+        fetchData()
+      }, 3000)
+    }
+  }
+
+  const refreshAnimation = useCallback(() => {
+    switch (Math.ceil(Math.random() * 5)) {
+      case 1:
+        return require('lotties/refresh1.json')
+      case 2:
+        return require('lotties/refresh2.json')
+      case 3:
+        return require('lotties/refresh3.json')
+      case 4:
+        return require('lotties/refresh4.json')
+      case 5:
+        return require('lotties/refresh5.json')
+    }
+  }, [])
+
   return (
     <View style={{ flex: 1 }}>
+      <View
+        style={{
+          width: size.screenWidth,
+          height: verticalScale(300),
+          backgroundColor: '#b8d4b9',
+          position: 'absolute',
+        }}
+      />
+      <LottieView ref={lottieViewRef} style={styles.lottieView} source={source} loop={false} />
+      <Animated.View
+        style={{
+          paddingTop: extraPaddingTop,
+        }}
+      />
       <FlatList
         keyExtractor={(item) => item.toString()}
         data={DATA}
         renderItem={(item) => <Post data={item.item} />}
-        ListHeaderComponent={<CoronaBoard />}
+        ListHeaderComponent={<CoronaBoard domesticStatus={domesticStatus} regionalStatus={regionalStatus} />}
+        onScroll={onScroll}
+        onResponderRelease={onRelease}
       />
     </View>
   )

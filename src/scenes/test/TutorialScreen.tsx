@@ -3,6 +3,7 @@ import { View, ScrollView, Text, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { scale, verticalScale } from 'react-native-size-matters'
 import LottieView from 'lottie-react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { color, size } from 'utils'
 
 /** 질문 카드의 너비: 전체 화면 너비 */
@@ -187,7 +188,10 @@ export default function TutorialScreen() {
               position: 'absolute',
               bottom: verticalScale(60),
             }}
-            onPress={() => navigation.navigate('TestScreen')}>
+            onPress={() => {
+              navigation.navigate('TestScreen')
+              AsyncStorage.setItem('isNotFirst', 'null')
+            }}>
             <Text style={{ fontSize: scale(20), fontWeight: 'bold', color: color.text.button }}>다음</Text>
           </Pressable>
           <Pressable
